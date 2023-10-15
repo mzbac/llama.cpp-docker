@@ -13,3 +13,8 @@ docker pull ghcr.io/mzbac/mzbac/llama.cpp-docker:latest
 docker run -it --rm -p 3000:8080 -v /path/on/host/to/models:/llama.cpp/models ghcr.io/mzbac/mzbac/llama.cpp-docker:latest
 
 ```
+### Inspecting the container image
+
+```
+docker run -it --rm --entrypoint /bin/sh -p 3000:8080 -v ./models:/llama.cpp/models ghcr.io/mzbac/mzbac/llama.cpp-docker:latest
+``````

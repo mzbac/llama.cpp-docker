@@ -13,4 +13,4 @@ if [ ! -f "$MODEL_FILE" ]; then
 fi
 
 # Launch the server
-exec ./server -m "$MODEL_FILE" -c 8192
+exec ./bin/server -m "$MODEL_FILE" -c 8192
