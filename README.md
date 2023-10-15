@@ -1,4 +1,5 @@
-# llama.cpp-docker-server
+# llama.cpp-docker
+This project builds a Docker image for llama.cpp server with only AVX2 enabled, which is more compatible with x86 CPUs.
 
 ## Usage
 ### Pull the Docker image from the GitHub Container Registry using the following command:
