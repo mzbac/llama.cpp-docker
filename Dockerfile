@@ -8,7 +8,7 @@ RUN git clone https://github.com/ggerganov/llama.cpp.git
 WORKDIR llama.cpp
 
 RUN mkdir build && cd build && \
-    cmake -DLLAMA_AVX2=ON .. && \
+    cmake -DLLAMA_NATIVE=OFF -DLLAMA_BUILD_SERVER=ON -DBUILD_SHARED_LIBS=ON .. && \
     cmake --build . --config Release
 
 FROM ubuntu:latest AS runtime
