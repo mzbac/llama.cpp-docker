@@ -32,7 +32,6 @@ jobs:
         id: commit_logs
         run: |
           RELEASE_NOTES=$(git log --pretty=format:"%s" --grep='.*' ${{ env.PREVIOUS_TAG }}..${{ env.LATEST_TAG }})
-          escaped_RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed -e 's/%/%25/g' -e 's/\r/%0D/g' -e 's/\n/%0A/g')
           echo "::set-output name=release_notes::${escaped_RELEASE_NOTES}"
 
   create-release-note:
@@ -42,7 +41,9 @@ jobs:
       image: ghcr.io/mzbac/mzbac/llama.cpp-docker:light
     steps:
       - name: check current directory
-        run: ./main
+        run: |
+          pwd
+          ls -la
 
   update-release-note:
     needs: commits-history
