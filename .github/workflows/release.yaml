@@ -31,8 +31,9 @@ jobs:
       - name: commit logs
         id: commit_logs
         run: |
-          RELEASE_NOTES=$(git log --pretty=format:"%s" --grep='.*' ${{ env.PREVIOUS_TAG }}..${{ env.LATEST_TAG }})
-          echo "::set-output name=release_notes::${RELEASE_NOTES}"
+          echo 'release_notes<<EOF' >> $GITHUB_OUTPUT
+          printf '%s\n' '$(git log --pretty=format:"- %s" --grep='.*' ${{ env.PREVIOUS_TAG }}..${{ env.LATEST_TAG }})' >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
 
   create-release-note:
     needs: commits-history
