@@ -26,7 +26,7 @@ jobs:
         id: output_step
         run: |
           RELEASE_NOTES=$(git log --pretty=format:"- %s" --grep='^foo:' ${{ env.PREVIOUS_TAG }}..${{ env.LATEST_TAG }})
-          echo "::set-output name=release_notes::${RELEASE_NOTES}"
+          echo "release_notes=${RELEASE_NOTES}" >> $GITHUB_OUTPUT
 
   update-release-note:
     needs: release_notes
