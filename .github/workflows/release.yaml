@@ -43,7 +43,7 @@ jobs:
       - name: check current directory
         run: |
           pwd
-          ls -la
+          ls /llama.cpp
 
   update-release-note:
     needs: commits-history
