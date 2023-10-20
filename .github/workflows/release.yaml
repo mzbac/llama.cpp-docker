@@ -42,8 +42,9 @@ jobs:
     steps:
       - name: check current directory
         run: |
-          pwd
-          ls /llama.cpp
+          cd /llama.cpp
+          wget https://huggingface.co/TheBloke/zephyr-7B-alpha-GGUF/resolve/main/zephyr-7b-alpha.Q5_K_M.gguf
+          ./main -m zephyr-7b-alpha.Q5_K_M.gguf -p "hello world" 
 
   update-release-note:
     needs: commits-history
