@@ -31,16 +31,17 @@ jobs:
       - name: commit logs
         id: commit_logs
         run: |
-          RELEASE_NOTES=$(git log --pretty=format:"- %s" --grep='^foo:' ${{ env.PREVIOUS_TAG }}..${{ env.LATEST_TAG }})
+          RELEASE_NOTES=$(git log --pretty=format:"- %s" --grep='.*' ${{ env.PREVIOUS_TAG }}..${{ env.LATEST_TAG }})
           echo "release_notes=${RELEASE_NOTES}" >> $GITHUB_OUTPUT
 
   create-release-note:
     needs: commits-history
     runs-on: ubuntu-latest
-    container: ghcr.io/mzbac/mzbac/llama.cpp-docker:light
+    container: 
+      image: ghcr.io/mzbac/mzbac/llama.cpp-docker:light
     steps:
       - name: check current directory
-        run: ls
+        run: ./main
 
   update-release-note:
     needs: commits-history
