@@ -1,8 +1,13 @@
 #!/bin/bash
 
-# Define the model URL and file path
-MODEL_URL="https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-GGUF/resolve/main/mistral-7b-instruct-v0.1.Q5_K_M.gguf"
-MODEL_FILE="models/mistral-7b-instruct-v0.1.Q5_K_M.gguf"
+# Get the model URL from the environment variable
+MODEL_URL=${MODEL_URL_ENV}
+
+# Extract the model file subtitle from the URL
+MODEL_SUBTITLE=$(basename "$MODEL_URL")
+
+# Define the model file path using the extracted subtitle
+MODEL_FILE="models/$MODEL_SUBTITLE"
 
 # Create the models directory if it doesn't exist
 mkdir -p models
