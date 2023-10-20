@@ -20,6 +20,4 @@ COPY --from=build /llama.cpp/build/bin/main /llama.cpp
 COPY --from=build /llama.cpp/build/libggml_shared.so /llama.cpp
 COPY --from=build /llama.cpp/build/libllama.so /llama.cpp
 
-WORKDIR /llama.cpp
-
 

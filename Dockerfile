@@ -20,7 +20,7 @@ COPY --from=build /llama.cpp/build /llama.cpp
 
 COPY entrypoint.sh /llama.cpp/entrypoint.sh
 
-WORKDIR /llama.cpp
+WORKDIR llama.cpp
 
 RUN chmod +x /llama.cpp/entrypoint.sh
 
