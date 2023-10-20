@@ -3,40 +3,37 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - main 
+      - main
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
-    - name: Set up Docker
-      run: |
-        docker --version
-        docker buildx create --use
-        
-    - name: Login to GitHub Container Registry
-      run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-        
-    - name: Build and push Docker full image
-      id: docker_build
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest
-        platforms: linux/amd64
+      - name: Checkout code
+        uses: actions/checkout@v2
 
+      - name: Set up Docker
+        run: |
+          docker --version
+          docker buildx create --use
 
-    - name: Build and push Docker light image
-          id: docker_build
-          uses: docker/build-push-action@v2
-          with:
-            context: .
-            push: true
-            tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:light  
-            platforms: linux/amd64
-            file: Dockerfile.light
+      - name: Login to GitHub Container Registry
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push Docker full image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest
+          platforms: linux/amd64
+
+      - name: Build and push Docker light image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:light
+          platforms: linux/amd64
+          file: Dockerfile.light
