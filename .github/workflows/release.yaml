@@ -15,14 +15,17 @@ jobs:
           fetch-depth: 0
 
       - name: Get last two release tags
+        id: get_last_two_release_tags
         run: |
           TAGS=$(git tag -l 'release-*' | sort -V | tail -n 2)
           readarray -t TAG_ARRAY <<< "$TAGS"
           echo "PREVIOUS_TAG=${TAG_ARRAY[0]}" >> $GITHUB_ENV
           echo "LATEST_TAG=${TAG_ARRAY[1]}" >> $GITHUB_ENV
+          echo "previous_tag=${TAG_ARRAY[0]}" >> $GITHUB_OUTPUT
+          echo "lastest_tag=${TAG_ARRAY[1]}" >> $GITHUB_OUTPUT
 
       - name: commit logs
-        id: output_step
+        id: commit_logs
         run: |
           RELEASE_NOTES=$(git log --pretty=format:"- %s" --grep='^foo:' ${{ env.PREVIOUS_TAG }}..${{ env.LATEST_TAG }})
           echo "release_notes=${RELEASE_NOTES}" >> $GITHUB_OUTPUT
@@ -33,24 +36,17 @@ jobs:
     container: ghcr.io/mzbac/mzbac/llama.cpp-docker:light
     steps:
       - name: check current directory
-        run: ls -la
+        run: ls
 
   update-release-note:
     needs: commits-history
     runs-on: ubuntu-latest
     steps:
-      - name: Get last two release tags
-        run: |
-          TAGS=$(git tag -l 'release-*' | sort -V | tail -n 2)
-          readarray -t TAG_ARRAY <<< "$TAGS"
-          echo "PREVIOUS_TAG=${TAG_ARRAY[0]}" >> $GITHUB_ENV
-          echo "LATEST_TAG=${TAG_ARRAY[1]}" >> $GITHUB_ENV
-
       - name: Update GitHub Release Notes
         run: |
           # Get release ID
           RELEASE_ID=$(curl --silent -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.LATEST_TAG }}" \
+          "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ needs.commits-history.outputs.get_last_two_release_tags.lastest_tag }}" \
           | jq '.id')
 
           # Update the release
@@ -58,5 +54,5 @@ jobs:
           -H "Content-Type: application/json" \
           "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID" \
           -d '{
-            "body": "'"${{ needs.release_notes.outputs.output_step.release_notes }}"'"
+            "body": "'"${{ needs.commits-history.outputs.commit_logs.release_notes }}"'"
           }'
