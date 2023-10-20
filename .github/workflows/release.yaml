@@ -32,20 +32,20 @@ jobs:
         id: commit_logs
         run: |
           echo 'release_notes<<EOF' >> $GITHUB_OUTPUT
-          printf '%s\n' '$(git log --pretty=format:"- %s" --grep='.*' ${{ env.PREVIOUS_TAG }}..${{ env.LATEST_TAG }})' >> $GITHUB_OUTPUT
+          printf "%s\n" "$(git log --pretty=format:"- %s" --grep='.*' ${{ env.PREVIOUS_TAG }}..${{ env.LATEST_TAG }})" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
-  create-release-note:
-    needs: commits-history
-    runs-on: ubuntu-latest
-    container: 
-      image: ghcr.io/mzbac/mzbac/llama.cpp-docker:light
-    steps:
-      - name: check current directory
-        run: |
-          cd /llama.cpp
-          wget https://huggingface.co/TheBloke/zephyr-7B-alpha-GGUF/resolve/main/zephyr-7b-alpha.Q5_K_M.gguf
-          ./main -m zephyr-7b-alpha.Q5_K_M.gguf -p "hello world" 
+  # create-release-note:
+  #   needs: commits-history
+  #   runs-on: ubuntu-latest
+  #   container: 
+  #     image: ghcr.io/mzbac/mzbac/llama.cpp-docker:light
+  #   steps:
+  #     - name: check current directory
+  #       run: |
+  #         cd /llama.cpp
+  #         wget https://huggingface.co/TheBloke/zephyr-7B-alpha-GGUF/resolve/main/zephyr-7b-alpha.Q5_K_M.gguf
+  #         ./main -m zephyr-7b-alpha.Q5_K_M.gguf -p "hello world" 
 
   update-release-note:
     needs: commits-history
