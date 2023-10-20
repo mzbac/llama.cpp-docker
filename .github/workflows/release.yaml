@@ -6,9 +6,8 @@ on:
       - "release-*"
 
 jobs:
-  release_notes:
+  commits-history:
     runs-on: ubuntu-latest
-    container: ghcr.io/mzbac/mzbac/llama.cpp-docker:light
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -22,17 +21,22 @@ jobs:
           echo "PREVIOUS_TAG=${TAG_ARRAY[0]}" >> $GITHUB_ENV
           echo "LATEST_TAG=${TAG_ARRAY[1]}" >> $GITHUB_ENV
 
-      - name: check current dir
-        run: ls -la
-
-      - name: Generate release notes
+      - name: commit logs
         id: output_step
         run: |
           RELEASE_NOTES=$(git log --pretty=format:"- %s" --grep='^foo:' ${{ env.PREVIOUS_TAG }}..${{ env.LATEST_TAG }})
           echo "release_notes=${RELEASE_NOTES}" >> $GITHUB_OUTPUT
 
+  create-release-note:
+    needs: commits-history
+    runs-on: ubuntu-latest
+    container: ghcr.io/mzbac/mzbac/llama.cpp-docker:light
+    steps:
+      - name: check current directory
+        run: ls -la
+
   update-release-note:
-    needs: release_notes
+    needs: commits-history
     runs-on: ubuntu-latest
     steps:
       - name: Get last two release tags
