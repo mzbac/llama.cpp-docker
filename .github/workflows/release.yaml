@@ -8,7 +8,7 @@ on:
 jobs:
   release_notes:
     runs-on: ubuntu-latest
-
+    container: ghcr.io/mzbac/mzbac/llama.cpp-docker:light
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -21,6 +21,9 @@ jobs:
           readarray -t TAG_ARRAY <<< "$TAGS"
           echo "PREVIOUS_TAG=${TAG_ARRAY[0]}" >> $GITHUB_ENV
           echo "LATEST_TAG=${TAG_ARRAY[1]}" >> $GITHUB_ENV
+
+      - name: check current dir
+        run: ls -la
 
       - name: Generate release notes
         id: output_step
