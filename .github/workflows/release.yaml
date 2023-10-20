@@ -8,6 +8,10 @@ on:
 jobs:
   commits-history:
     runs-on: ubuntu-latest
+    outputs:
+      previous_tag: ${{ steps.get_last_two_release_tags.outputs.previous_tag }}
+      lastest_tag: ${{ steps.get_last_two_release_tags.outputs.lastest_tag }}
+      release_notes: ${{ steps.commit_logs.outputs.release_notes }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -46,7 +50,7 @@ jobs:
         run: |
           # Get release ID
           RELEASE_ID=$(curl --silent -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ needs.commits-history.outputs.get_last_two_release_tags.lastest_tag }}" \
+          "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ needs.commits-history.outputs.lastest_tag }}" \
           | jq '.id')
 
           # Update the release
@@ -54,5 +58,5 @@ jobs:
           -H "Content-Type: application/json" \
           "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID" \
           -d '{
-            "body": "'"${{ needs.commits-history.outputs.commit_logs.release_notes }}"'"
+            "body": "'"${{ needs.commits-history.outputs.release_notes }}"'"
           }'
