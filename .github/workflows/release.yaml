@@ -31,7 +31,7 @@ jobs:
       - name: commit logs
         id: commit_logs
         run: |
-          RELEASE_NOTES=$(git log --pretty=format:"- %s" --grep='.*' ${{ env.PREVIOUS_TAG }}..${{ env.LATEST_TAG }})
+          RELEASE_NOTES=$(git log --pretty=format:"%s" --grep='.*' ${{ env.PREVIOUS_TAG }}..${{ env.LATEST_TAG }})
           echo "release_notes=${RELEASE_NOTES}" >> $GITHUB_OUTPUT
 
   create-release-note:
