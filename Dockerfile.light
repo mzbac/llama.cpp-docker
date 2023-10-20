@@ -16,7 +16,7 @@ FROM ubuntu:latest AS runtime
 RUN apt-get update && \
     apt-get install -y wget
 
-COPY --from=build /llama.cpp/build/main /llama.cpp/main
+COPY --from=build /llama.cpp/build/bin/main /llama.cpp/main
 
 
 WORKDIR /llama.cpp
