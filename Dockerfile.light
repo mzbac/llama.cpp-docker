@@ -16,8 +16,9 @@ FROM ubuntu:latest AS runtime
 RUN apt-get update && \
     apt-get install -y wget
 
-COPY --from=build /llama.cpp/build/bin/main /llama.cpp
-COPY --from=build /llama.cpp/build/libggml_shared.so /llama.cpp
-COPY --from=build /llama.cpp/build/libllama.so /llama.cpp
+COPY --from=build /llama.cpp/build/bin/main /llama.cpp/main
+COPY --from=build /llama.cpp/build/libggml_shared.so /llama.cpp/libggml_shared.so
+COPY --from=build /llama.cpp/build/libllama.so /llama.cpp/libllama.so
 
+WORKDIR llama.cpp
 
