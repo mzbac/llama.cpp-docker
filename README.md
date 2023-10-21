@@ -11,7 +11,7 @@ docker pull ghcr.io/mzbac/mzbac/llama.cpp-docker:latest
 ### Running the Container with Models Volume
 
 ```
-docker run -it --rm -p 3000:8080 -v /path/on/host/to/models:/llama.cpp/models ghcr.io/mzbac/mzbac/llama.cpp-docker:latest
+docker run -it --rm -p 3000:8080 -v /path/on/host/to/models:/llama.cpp/models -e MODEL_URL_ENV=https://huggingface.co/TheBloke/zephyr-7B-alpha-GGUF/resolve/main/zephyr-7b-alpha.Q5_K_M.gguf ghcr.io/mzbac/mzbac/llama.cpp-docker:latest
 
 ```
 ### Inspecting the container image
